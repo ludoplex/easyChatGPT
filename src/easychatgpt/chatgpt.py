@@ -194,13 +194,12 @@ class ChatClient:
             # this will give an error if thread currently selected
             # as currently selected thread is under a different xpath
             self.browser.find_element(By.XPATH, (self.thread_xq + self.text_xq.format(name))).click()
-            self.__log("Thread {} selected".format(name))
+            self.__log(f"Thread {name} selected")
 
-        # in this case, the thread could be currently selected, so we check for that
         except NoSuchElementException:
             try:
                 self.browser.find_element(By.XPATH, (self.thread_selected_xq + self.text_xq.format(name))).click()
-                self.__log("Thread {} already selected".format(name))
+                self.__log(f"Thread {name} already selected")
             except Exception as e:
                 self.__log("Thread could not be found")
                 raise
@@ -229,14 +228,14 @@ class ChatClient:
 
     def edit_thread_name(self, name):
         """changes the name of the current thread"""
-        self.browser.find_element(By.XPATH, self.thread_selected_xq).click() 
+        self.browser.find_element(By.XPATH, self.thread_selected_xq).click()
         buttons = self.browser.find_elements(By.XPATH, self.thread_buttons_xq)
         edit_button = buttons[0]
         edit_button.click()
 
         edit_field_xq = '//*[@class = "text-sm border-none bg-transparent p-0 m-0 w-full mr-0"]'
         edit_field = self.__sleepy_find_element(By.XPATH, edit_field_xq)
-        edit_field.send_keys(Keys.CONTROL + "a", Keys.DELETE)
+        edit_field.send_keys(f"{Keys.CONTROL}a", Keys.DELETE)
         edit_field.send_keys(name)
 
         confirm_buttons = self.browser.find_elements(By.XPATH, self.thread_buttons_xq)
